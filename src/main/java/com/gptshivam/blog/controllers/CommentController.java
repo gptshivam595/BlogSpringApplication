@@ -14,8 +14,11 @@ import com.gptshivam.blog.payloads.ApiResponse;
 import com.gptshivam.blog.payloads.CommentDto;
 import com.gptshivam.blog.services.CommentService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/")
+@Tag(name = "CommentController" ,description = "CRUD opertions of comment")
 public class CommentController {
 	
 	@Autowired

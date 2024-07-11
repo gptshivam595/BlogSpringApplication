@@ -1,6 +1,5 @@
 package com.gptshivam.blog.controllers;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +13,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gptshivam.blog.exception.ApiException;
 import com.gptshivam.blog.payloads.JwtAuthRequest;
 import com.gptshivam.blog.payloads.JwtAuthResponse;
+import com.gptshivam.blog.payloads.UserDto;
 import com.gptshivam.blog.security.JwtTokenHelper;
+import com.gptshivam.blog.services.UserService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/auth/")
+@Tag(name = "AuthController" ,description = "Apis for Authentication")
 public class AuthController {
 
 	@Autowired
 	private JwtTokenHelper jwtTokenHelper;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
@@ -50,8 +57,15 @@ public class AuthController {
 			
 		} catch (BadCredentialsException e) {
 			System.out.println("Invalid details !!");
-			throw new Exception("Invalid username or password !!");
+			throw new ApiException("Invalid username or password !!");
 		}
 		
+	}
+	
+	//register new user api
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> registeruser(@RequestBody UserDto userDto){
+		UserDto registeredUser= this.userService.registerNewUser(userDto);
+		return new ResponseEntity<UserDto>(registeredUser,HttpStatus.CREATED);
 	}
 }

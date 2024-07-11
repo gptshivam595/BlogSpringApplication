@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gptshivam.blog.payloads.ApiResponse;
 import com.gptshivam.blog.payloads.CategoryDto;
 import com.gptshivam.blog.services.CategoryService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(name = "CategoryController" ,description = "CRUD opertions of Category")
 public class CategoryController {
 	
 	@Autowired
