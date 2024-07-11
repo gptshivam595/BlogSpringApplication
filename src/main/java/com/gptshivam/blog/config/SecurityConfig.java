@@ -38,14 +38,20 @@ public class SecurityConfig {
         this.customUserDetailService = customUserDetailService;
     }
 
+    public static final String[] Auth_List= {
+    		"/api/v1/auth/**",
+    		"/v3/api-docs/**",
+    		"/swagger-ui/**"
+    };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-            	.requestMatchers("/api/v1/auth/**").permitAll() 
-            	.requestMatchers("/v3/api-docs/**").permitAll()
-            	.requestMatchers("/swagger-ui/**").permitAll()
+            	.requestMatchers(Auth_List).permitAll()	
+//            	.requestMatchers("/api/v1/auth/**").permitAll() 
+//            	.requestMatchers("/v3/api-docs/**").permitAll()
+//            	.requestMatchers("/swagger-ui/**").permitAll()
             	.requestMatchers(HttpMethod.GET).permitAll()
                 .anyRequest().authenticated()
             )
