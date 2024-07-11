@@ -1,5 +1,8 @@
 package com.gptshivam.blog.payloads;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 //import jakarta.validation.constraints.Pattern;
@@ -27,4 +30,5 @@ public class UserDto {
 	@NotEmpty
 	private String about;
 	
+	private Set<RoleDto> roles= new HashSet<>();
 }

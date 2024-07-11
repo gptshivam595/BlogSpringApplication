@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,12 @@ import com.gptshivam.blog.payloads.ApiResponse;
 import com.gptshivam.blog.payloads.UserDto;
 import com.gptshivam.blog.services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "UserController" ,description = "CRUD opertions of user")
 public class UserController {
 	
 	@Autowired
@@ -37,7 +40,7 @@ public class UserController {
 		UserDto updatedUser = this.userService.updateUser(userDto, uid);
 		return ResponseEntity.ok(updatedUser);
 	}
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer uid){
 		this.userService.deleteUser(uid);

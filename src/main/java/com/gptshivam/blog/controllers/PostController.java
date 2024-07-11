@@ -28,11 +28,13 @@ import com.gptshivam.blog.payloads.PostResponse;
 import com.gptshivam.blog.services.FileService;
 import com.gptshivam.blog.services.PostService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
 @RequestMapping("/api/")
+@Tag(name = "PostController" ,description = "CRUD opertions of post")
 public class PostController {
 	
 	@Autowired
