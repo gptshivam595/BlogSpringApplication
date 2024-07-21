@@ -73,6 +73,9 @@ The Blog Application is a backend-only project developed using Spring Boot. It l
 
 ![image](https://github.com/gptshivam595/BlogSpringApplication/blob/fbd0776d07847f75f4125ca1eb06b7d9ee6026d2/DB-Schema.png)
 
+## System Architecture Diagram
+
+![image](https://github.com/gptshivam595/BlogSpringApplication/blob/main/System%20Architecture%20Diagram.jpg)
 
 ## Communication
 
