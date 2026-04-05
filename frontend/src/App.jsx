@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
@@ -52,6 +52,18 @@ function safeJsonParse(value, fallback) {
   }
 }
 
+function normalizePost(post) {
+  if (!post) {
+    return post
+  }
+  const comments = (post.comments || []).map((comment) => ({
+    ...comment,
+    id: comment.id ?? comment.Id,
+    clientKey: comment.id ?? comment.Id ?? crypto.randomUUID(),
+  }))
+  return { ...post, comments }
+}
+
 function App() {
   const [token, setToken] = useState(() => readToken())
 
@@ -96,31 +108,31 @@ function App() {
 
   const isAuthenticated = useMemo(() => token.length > 0, [token])
 
-  const setFriendlyError = (prefix, error) => {
+  const setFriendlyError = useCallback((prefix, error) => {
     const payload = safeJsonParse(error.message, {})
     const message = payload?.message || error.message || 'Unknown error'
     setStatus(`${prefix}: ${message}`)
-  }
+  }, [])
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await apiRequest('/api/users/', {}, token)
       setUsers(data)
     } catch (error) {
       setFriendlyError('Users load failed', error)
     }
-  }
+  }, [setFriendlyError, token])
 
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     try {
       const data = await apiRequest('/api/categories/')
       setCategories(data)
     } catch (error) {
       setFriendlyError('Categories load failed', error)
     }
-  }
+  }, [setFriendlyError])
 
-  const loadPosts = async (page = 0) => {
+  const loadPosts = useCallback(async (page = 0) => {
     try {
       const data = await apiRequest(`/api/posts?pageNumber=${page}&pageSize=5&sortBy=postId&sortDir=desc`)
       setPosts(data.content || [])
@@ -129,27 +141,27 @@ function App() {
     } catch (error) {
       setFriendlyError('Posts load failed', error)
     }
-  }
+  }, [setFriendlyError])
 
-  const loadPostDetails = async (postId) => {
+  const loadPostDetails = useCallback(async (postId) => {
     try {
       const data = await apiRequest(`/api/posts/${postId}`)
-      setSelectedPost(data)
+      setSelectedPost(normalizePost(data))
     } catch (error) {
       setFriendlyError('Post details load failed', error)
     }
-  }
+  }, [setFriendlyError])
 
   useEffect(() => {
     loadCategories()
     loadPosts(0)
-  }, [])
+  }, [loadCategories, loadPosts])
 
   useEffect(() => {
     if (isAuthenticated) {
       loadUsers()
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, loadUsers])
 
   const handleRegister = async (event) => {
     event.preventDefault()
@@ -577,9 +589,9 @@ function App() {
 
               <ul>
                 {(selectedPost.comments || []).map((comment) => (
-                  <li key={comment.id || comment.Id || `${selectedPost.postId}-${comment.content}`} className="postRow">
+                  <li key={comment.clientKey} className="postRow">
                     <span>{comment.content}</span>
-                    <button onClick={() => handleDeleteComment(comment.id || comment.Id)}>
+                    <button disabled={!comment.id} onClick={() => handleDeleteComment(comment.id)}>
                       Delete
                     </button>
                   </li>
