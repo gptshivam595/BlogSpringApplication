@@ -70,6 +70,8 @@ For cloud deployment, set these variables so the app binds correctly and connect
 - `SPRING_JPA_HIBERNATE_DIALECT` (optional; defaults to `org.hibernate.dialect.MySQL8Dialect`)
 - `SPRING_JPA_HIBERNATE_DDL_AUTO` (optional; defaults to `validate`)
 
+For local development, you can override `SPRING_JPA_HIBERNATE_DDL_AUTO` to `update` (or use the `dev` profile) to auto-create/update schema.
+
   
 ## Maven Libraries used
 
