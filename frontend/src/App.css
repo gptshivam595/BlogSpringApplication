@@ -9,7 +9,7 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 16px;
 }
@@ -22,63 +22,84 @@ body {
   margin-bottom: 16px;
 }
 
-.header h1 {
-  margin: 0;
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
-.status {
-  margin-top: 8px;
+.brand {
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.badge {
   background: #1f2937;
-  border-radius: 6px;
-  padding: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
 }
 
-.toolbar {
-  margin-top: 12px;
+.nav {
   display: flex;
   gap: 8px;
+  margin-top: 12px;
   flex-wrap: wrap;
 }
 
-.grid {
+.nav a,
+.nav button,
+.buttonLike {
+  display: inline-block;
+  border: 1px solid #4b5563;
+  background: #1f2937;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav a.active {
+  border-color: #22c55e;
+}
+
+.page {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
 .card {
-  background: white;
+  background: #fff;
+  border: 1px solid #d1d5db;
   border-radius: 10px;
   padding: 14px;
-  border: 1px solid #d1d5db;
-}
-
-.card.wide {
-  grid-column: 1 / -1;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .rowForm {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 input,
 textarea,
+select,
 button {
   font: inherit;
   padding: 8px;
 }
 
 ul {
-  margin: 0;
+  margin: 8px 0;
   padding-left: 18px;
 }
 
@@ -97,13 +118,21 @@ ul {
 
 .pager {
   display: flex;
-  align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  align-items: center;
 }
 
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.statusText {
+  margin-top: 8px;
+  padding: 8px;
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 8px;
 }

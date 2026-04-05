@@ -1,6 +1,6 @@
-# Blog Frontend (React + Vite)
+# Blog Frontend (React + Vite + React Router)
 
-This frontend is connected to the Spring Boot backend in this repository.
+This frontend is connected to the Spring Boot backend in this repository and now includes a cleaner multi-page UI with role-based screens.
 
 ## Prerequisites
 
@@ -31,19 +31,29 @@ If you want to use a direct API base URL, copy `.env.example` to `.env` and set:
 VITE_API_BASE_URL=http://localhost:9091
 ```
 
+## Routes
+
+- `/` Home
+- `/posts` Posts listing + search + pagination
+- `/posts/:postId` Post details + comments + image upload
+- `/login` Login
+- `/register` Register
+- `/user` User dashboard (requires `ROLE_NORMAL` or `ROLE_ADMIN`)
+- `/admin` Admin dashboard (requires `ROLE_ADMIN`)
+
+## Role Handling
+
+- Backend roles are read from `UserDto.roles`.
+- Route guards enforce role access in frontend.
+- Login payload uses `username` = user email (backend requirement).
+
 ## Available Features
 
 - Register user
-- Login (JWT)
-- List users (requires login)
-- List/create categories
-- List/search posts with pagination
-- Create/delete posts
-- View single post details
-- Add/delete comments
-- Upload post image
-
-## Notes
-
-- Backend auth expects login payload with `username` as the user email.
-- For create post, provide existing `userId` and `categoryId`.
+- Login/logout with JWT
+- Browse/search posts
+- Create/delete posts (auth required)
+- Add/delete comments (auth required)
+- Upload post image (auth required)
+- Admin user/category management
+- User dashboard for own posts
