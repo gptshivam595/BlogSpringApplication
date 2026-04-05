@@ -63,12 +63,12 @@ This uses an in-memory H2 datasource from `application-dev.properties`.
 For cloud deployment, set these variables so the app binds correctly and connects to your managed database:
 
 - `PORT` (optional; defaults to `9091`)
-- `SPRING_DATASOURCE_URL`
-- `SPRING_DATASOURCE_USERNAME`
-- `SPRING_DATASOURCE_PASSWORD`
+- `SPRING_DATASOURCE_URL` (optional for local; defaults to `jdbc:mysql://localhost:3306/blog_app_apis`)
+- `SPRING_DATASOURCE_USERNAME` (optional for local; defaults to `root`)
+- `SPRING_DATASOURCE_PASSWORD` (optional for local; defaults to `changeme`)
 - `SPRING_DATASOURCE_DRIVER_CLASS_NAME` (optional; defaults to `com.mysql.cj.jdbc.Driver`)
 - `SPRING_JPA_HIBERNATE_DIALECT` (optional; defaults to `org.hibernate.dialect.MySQL8Dialect`)
-- `SPRING_JPA_HIBERNATE_DDL_AUTO` (optional; defaults to `update`)
+- `SPRING_JPA_HIBERNATE_DDL_AUTO` (optional; defaults to `validate`)
 
   
 ## Maven Libraries used
