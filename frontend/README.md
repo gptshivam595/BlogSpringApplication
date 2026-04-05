@@ -1,4 +1,6 @@
-# Blog Frontend (React + Vite + React Router)
+## Blog Frontend (React + Vite + React Router + Material UI)
+
+This UI uses Material UI components for cleaner, consistent styling while keeping the same backend API contracts.
 
 This frontend is connected to the Spring Boot backend in this repository and now includes a cleaner multi-page UI with role-based screens.
 
@@ -57,3 +59,11 @@ VITE_API_BASE_URL=http://localhost:9091
 - Upload post image (auth required)
 - Admin user/category management
 - User dashboard for own posts
+
+
+## UI Library
+
+- Material UI (`@mui/material`)
+- Emotion (`@emotion/react`, `@emotion/styled`)
+
+The backend integration remains unchanged; only the presentation layer was upgraded.

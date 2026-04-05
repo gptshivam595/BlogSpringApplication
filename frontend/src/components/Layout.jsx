@@ -1,36 +1,57 @@
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { AppBar, Box, Button, Chip, Container, Stack, Toolbar, Typography } from '@mui/material'
+import { Link as RouterLink, NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+
+const linkSx = {
+  color: 'inherit',
+  textDecoration: 'none',
+  px: 1,
+  py: 0.5,
+  borderRadius: 1,
+  '&.active': {
+    bgcolor: 'primary.light',
+    color: 'primary.contrastText',
+  },
+}
 
 export default function Layout() {
   const { isAuthenticated, currentUser, logout } = useAuth()
 
   return (
-    <div className="app">
-      <header className="header">
-        <div className="topRow">
-          <Link to="/" className="brand">Blog Frontend</Link>
-          <div>
-            {currentUser ? <span className="badge">{currentUser.email}</span> : <span className="badge">Guest</span>}
-          </div>
-        </div>
-        <nav className="nav">
-          <NavLink to="/" end>Home</NavLink>
-          <NavLink to="/posts">Posts</NavLink>
-          <NavLink to="/admin">Admin</NavLink>
-          <NavLink to="/user">User</NavLink>
-          {!isAuthenticated ? (
-            <>
-              <NavLink to="/login">Login</NavLink>
-              <NavLink to="/register">Register</NavLink>
-            </>
-          ) : (
-            <button type="button" onClick={logout}>Logout</button>
-          )}
-        </nav>
-      </header>
-      <main className="page">
+    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.100' }}>
+      <AppBar position="sticky" color="default" elevation={1}>
+        <Toolbar sx={{ flexWrap: 'wrap', gap: 1 }}>
+          <Typography
+            component={RouterLink}
+            to="/"
+            variant="h6"
+            sx={{ color: 'text.primary', textDecoration: 'none', mr: 2 }}
+          >
+            Blog Frontend
+          </Typography>
+
+          <Stack direction="row" spacing={1} sx={{ flexGrow: 1, flexWrap: 'wrap' }}>
+            <Box component={NavLink} to="/" end sx={linkSx}>Home</Box>
+            <Box component={NavLink} to="/posts" sx={linkSx}>Posts</Box>
+            <Box component={NavLink} to="/admin" sx={linkSx}>Admin</Box>
+            <Box component={NavLink} to="/user" sx={linkSx}>User</Box>
+            {!isAuthenticated ? (
+              <>
+                <Box component={NavLink} to="/login" sx={linkSx}>Login</Box>
+                <Box component={NavLink} to="/register" sx={linkSx}>Register</Box>
+              </>
+            ) : (
+              <Button size="small" variant="outlined" onClick={logout}>Logout</Button>
+            )}
+          </Stack>
+
+          <Chip size="small" label={currentUser?.email || 'Guest'} />
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="lg" sx={{ py: 3 }}>
         <Outlet />
-      </main>
-    </div>
+      </Container>
+    </Box>
   )
 }

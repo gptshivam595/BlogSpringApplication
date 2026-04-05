@@ -1,7 +1,19 @@
+import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { api } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
+import { api } from '../lib/api'
 
 function normalizePost(post) {
   if (!post) {
@@ -101,36 +113,63 @@ export default function PostDetailPage() {
   }
 
   if (!post) {
-    return <section className="card"><h2>Post Details</h2><p>Loading...</p></section>
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h5">Post Details</Typography>
+          <Typography color="text.secondary">Loading...</Typography>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
-    <section className="card">
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      <p>Category: {post.category?.categoryTitle}</p>
-      <p>Author: {post.user?.name}</p>
-      <p>Image: {post.imageName || 'none'}</p>
+    <Card>
+      <CardContent>
+        <Typography variant="h5" gutterBottom>{post.title}</Typography>
+        <Typography sx={{ mb: 1 }}>{post.content}</Typography>
+        <Typography variant="body2" color="text.secondary">Category: {post.category?.categoryTitle}</Typography>
+        <Typography variant="body2" color="text.secondary">Author: {post.user?.name}</Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Image: {post.imageName || 'none'}</Typography>
 
-      <form onSubmit={uploadImage} className="rowForm">
-        <input type="file" accept="image/*" onChange={(event) => setImageFile(event.target.files?.[0] || null)} />
-        <button type="submit">Upload Image</button>
-      </form>
+        <Stack component="form" direction={{ xs: 'column', sm: 'row' }} spacing={1} onSubmit={uploadImage} sx={{ mb: 2 }}>
+          <Button component="label" variant="outlined">
+            Choose Image
+            <input hidden type="file" accept="image/*" onChange={(event) => setImageFile(event.target.files?.[0] || null)} />
+          </Button>
+          <Button type="submit" variant="contained">Upload Image</Button>
+        </Stack>
 
-      <h3>Comments</h3>
-      <form onSubmit={addComment} className="rowForm">
-        <input value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Write a comment" required />
-        <button type="submit">Add</button>
-      </form>
-      <ul>
-        {(post.comments || []).map((item) => (
-          <li key={item.clientKey} className="postRow">
-            <span>{item.content}</span>
-            <button type="button" disabled={!item.id} onClick={() => removeComment(item.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      {status ? <p className="statusText">{status}</p> : null}
-    </section>
+        <Typography variant="h6" sx={{ mb: 1 }}>Comments</Typography>
+        <Stack component="form" direction={{ xs: 'column', sm: 'row' }} spacing={1} onSubmit={addComment} sx={{ mb: 2 }}>
+          <TextField
+            value={comment}
+            onChange={(event) => setComment(event.target.value)}
+            placeholder="Write a comment"
+            required
+            fullWidth
+          />
+          <Button type="submit" variant="contained">Add</Button>
+        </Stack>
+
+        <List>
+          {(post.comments || []).map((item) => (
+            <ListItem
+              key={item.clientKey}
+              disableGutters
+              secondaryAction={(
+                <Button size="small" disabled={!item.id} onClick={() => removeComment(item.id)}>
+                  Delete
+                </Button>
+              )}
+            >
+              <ListItemText primary={item.content} />
+            </ListItem>
+          ))}
+        </List>
+
+        {status ? <Alert severity="info" sx={{ mt: 2 }}>{status}</Alert> : null}
+      </CardContent>
+    </Card>
   )
 }

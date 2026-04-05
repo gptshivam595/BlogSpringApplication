@@ -1,3 +1,4 @@
+import { Alert, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -21,25 +22,27 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="card">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input
-          placeholder="Username (email)"
-          value={form.username}
-          onChange={(event) => setForm({ ...form, username: event.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(event) => setForm({ ...form, password: event.target.value })}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      {status ? <p className="statusText">{status}</p> : null}
-    </section>
+    <Card>
+      <CardContent>
+        <Typography variant="h5" gutterBottom>Login</Typography>
+        <Stack component="form" spacing={2} onSubmit={handleSubmit}>
+          <TextField
+            label="Username (email)"
+            value={form.username}
+            onChange={(event) => setForm({ ...form, username: event.target.value })}
+            required
+          />
+          <TextField
+            label="Password"
+            type="password"
+            value={form.password}
+            onChange={(event) => setForm({ ...form, password: event.target.value })}
+            required
+          />
+          <Button type="submit" variant="contained">Login</Button>
+        </Stack>
+        {status ? <Alert severity="info" sx={{ mt: 2 }}>{status}</Alert> : null}
+      </CardContent>
+    </Card>
   )
 }

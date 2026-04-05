@@ -1,7 +1,20 @@
+import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
+import { api } from '../lib/api'
 
 export default function UserDashboardPage() {
   const { currentUser, token, isAuthenticated } = useAuth()
@@ -65,49 +78,64 @@ export default function UserDashboardPage() {
   }
 
   return (
-    <section className="card">
-      <h2>User Dashboard</h2>
-      <p>Create and manage your own posts.</p>
+    <Card>
+      <CardContent>
+        <Typography variant="h5" gutterBottom>User Dashboard</Typography>
+        <Typography color="text.secondary" sx={{ mb: 2 }}>Create and manage your own posts.</Typography>
 
-      <form onSubmit={createPost} className="form">
-        <select
-          value={form.categoryId}
-          onChange={(event) => setForm({ ...form, categoryId: event.target.value })}
-          required
-        >
-          <option value="">Select category</option>
-          {categories.map((cat) => (
-            <option key={cat.categoryId} value={cat.categoryId}>{cat.categoryTitle}</option>
+        <Stack component="form" spacing={2} onSubmit={createPost} sx={{ mb: 2 }}>
+          <TextField
+            select
+            label="Category"
+            value={form.categoryId}
+            onChange={(event) => setForm({ ...form, categoryId: event.target.value })}
+            required
+          >
+            <MenuItem value="">Select category</MenuItem>
+            {categories.map((cat) => (
+              <MenuItem key={cat.categoryId} value={cat.categoryId}>{cat.categoryTitle}</MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            label="Title"
+            value={form.title}
+            onChange={(event) => setForm({ ...form, title: event.target.value })}
+            required
+          />
+
+          <TextField
+            label="Content"
+            multiline
+            minRows={3}
+            value={form.content}
+            onChange={(event) => setForm({ ...form, content: event.target.value })}
+            required
+          />
+
+          <Button type="submit" variant="contained">Create Post</Button>
+        </Stack>
+
+        <Typography variant="h6" sx={{ mb: 1 }}>My Posts</Typography>
+        <List>
+          {myPosts.map((post) => (
+            <ListItem
+              key={post.postId}
+              disableGutters
+              secondaryAction={(
+                <Stack direction="row" spacing={1}>
+                  <Button component={Link} to={`/posts/${post.postId}`} size="small" variant="outlined">Details</Button>
+                  <Button size="small" onClick={() => deletePost(post.postId)}>Delete</Button>
+                </Stack>
+              )}
+            >
+              <ListItemText primary={post.title} />
+            </ListItem>
           ))}
-        </select>
-        <input
-          value={form.title}
-          onChange={(event) => setForm({ ...form, title: event.target.value })}
-          placeholder="Title"
-          required
-        />
-        <textarea
-          value={form.content}
-          onChange={(event) => setForm({ ...form, content: event.target.value })}
-          placeholder="Content"
-          required
-        />
-        <button type="submit">Create Post</button>
-      </form>
+        </List>
 
-      <h3>My Posts</h3>
-      <ul>
-        {myPosts.map((post) => (
-          <li key={post.postId} className="postRow">
-            <span>{post.title}</span>
-            <div className="actions">
-              <Link className="buttonLike" to={`/posts/${post.postId}`}>Details</Link>
-              <button type="button" onClick={() => deletePost(post.postId)}>Delete</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      {status ? <p className="statusText">{status}</p> : null}
-    </section>
+        {status ? <Alert severity="info" sx={{ mt: 2 }}>{status}</Alert> : null}
+      </CardContent>
+    </Card>
   )
 }

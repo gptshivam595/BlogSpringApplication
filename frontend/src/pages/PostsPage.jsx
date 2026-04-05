@@ -1,7 +1,20 @@
+import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
+import { api } from '../lib/api'
 
 export default function PostsPage() {
   const { token, isAuthenticated } = useAuth()
@@ -59,40 +72,50 @@ export default function PostsPage() {
   }
 
   return (
-    <section className="card">
-      <h2>Posts</h2>
-      <form onSubmit={handleSearch} className="rowForm">
-        <input
-          placeholder="Search title"
-          value={keyword}
-          onChange={(event) => setKeyword(event.target.value)}
-        />
-        <button type="submit">Search</button>
-        <button type="button" onClick={() => { setKeyword(''); loadPosts(0) }}>Reset</button>
-      </form>
+    <Card>
+      <CardContent>
+        <Typography variant="h5" gutterBottom>Posts</Typography>
 
-      {meta ? (
-        <div className="pager">
-          <button disabled={page <= 0} onClick={() => loadPosts(page - 1)}>Prev</button>
-          <span>Page {meta.pageNumber + 1} / {Math.max(meta.totalPage, 1)}</span>
-          <button disabled={meta.lastPage} onClick={() => loadPosts(page + 1)}>Next</button>
-        </div>
-      ) : null}
+        <Stack component="form" direction={{ xs: 'column', sm: 'row' }} spacing={1} onSubmit={handleSearch} sx={{ mb: 2 }}>
+          <TextField
+            label="Search title"
+            value={keyword}
+            onChange={(event) => setKeyword(event.target.value)}
+            fullWidth
+          />
+          <Button type="submit" variant="contained">Search</Button>
+          <Button type="button" variant="outlined" onClick={() => { setKeyword(''); loadPosts(0) }}>Reset</Button>
+        </Stack>
 
-      <ul>
-        {posts.map((post) => (
-          <li key={post.postId} className="postRow">
-            <span>
-              <b>{post.title}</b> by {post.user?.name || 'unknown'}
-            </span>
-            <div className="actions">
-              <Link className="buttonLike" to={`/posts/${post.postId}`}>Details</Link>
-              <button type="button" onClick={() => deletePost(post.postId)}>Delete</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      {status ? <p className="statusText">{status}</p> : null}
-    </section>
+        {meta ? (
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+            <Button disabled={page <= 0} onClick={() => loadPosts(page - 1)}>Prev</Button>
+            <Typography variant="body2">Page {meta.pageNumber + 1} / {Math.max(meta.totalPage, 1)}</Typography>
+            <Button disabled={meta.lastPage} onClick={() => loadPosts(page + 1)}>Next</Button>
+          </Stack>
+        ) : null}
+
+        <List>
+          {posts.map((post) => (
+            <ListItem
+              key={post.postId}
+              disableGutters
+              secondaryAction={(
+                <Stack direction="row" spacing={1}>
+                  <Button component={Link} to={`/posts/${post.postId}`} size="small" variant="outlined">Details</Button>
+                  <IconButton edge="end" onClick={() => deletePost(post.postId)}>
+                    🗑
+                  </IconButton>
+                </Stack>
+              )}
+            >
+              <ListItemText primary={post.title} secondary={`By ${post.user?.name || 'unknown'}`} />
+            </ListItem>
+          ))}
+        </List>
+
+        {status ? <Alert severity="info" sx={{ mt: 2 }}>{status}</Alert> : null}
+      </CardContent>
+    </Card>
   )
 }
