@@ -1,16 +1,49 @@
-# React + Vite
+# Blog Frontend (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This frontend is connected to the Spring Boot backend in this repository.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Backend running on `http://localhost:9091`
+- Node.js 18+ and npm
 
-## React Compiler
+## Run Frontend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Frontend runs on `http://localhost:5173`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Backend API Connection
+
+By default, Vite dev server proxy forwards these paths to backend `http://localhost:9091`:
+
+- `/api/*`
+- `/v3/*`
+- `/swagger-ui/*`
+
+If you want to use a direct API base URL, copy `.env.example` to `.env` and set:
+
+```bash
+VITE_API_BASE_URL=http://localhost:9091
+```
+
+## Available Features
+
+- Register user
+- Login (JWT)
+- List users (requires login)
+- List/create categories
+- List/search posts with pagination
+- Create/delete posts
+- View single post details
+- Add/delete comments
+- Upload post image
+
+## Notes
+
+- Backend auth expects login payload with `username` as the user email.
+- For create post, provide existing `userId` and `categoryId`.
