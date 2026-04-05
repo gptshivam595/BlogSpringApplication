@@ -53,7 +53,7 @@ The Blog Application is a backend-only project developed using Spring Boot. It l
 ### Run backend without local MySQL (dev profile)
 
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+./mvnw spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=dev
 ```
 
 This uses an in-memory H2 datasource from `application-dev.properties`.
