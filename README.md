@@ -50,6 +50,14 @@ The Blog Application is a backend-only project developed using Spring Boot. It l
 
    iv.For swagger api hit at ***localhost:9091/swagger-ui.html***
 
+### Run backend without local MySQL (dev profile)
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=dev
+```
+
+This uses an in-memory H2 datasource from `application-dev.properties`.
+
   
 ## Maven Libraries used
 
@@ -80,4 +88,3 @@ The Blog Application is a backend-only project developed using Spring Boot. It l
 ## Communication
 
 For support, email gptshivam595@gmail.com .
-
