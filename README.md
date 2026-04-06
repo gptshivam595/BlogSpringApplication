@@ -69,8 +69,56 @@ For cloud deployment, set these variables so the app binds correctly and connect
 - `SPRING_DATASOURCE_DRIVER_CLASS_NAME` (optional; defaults to `com.mysql.cj.jdbc.Driver`)
 - `SPRING_JPA_HIBERNATE_DIALECT` (optional; defaults to `org.hibernate.dialect.MySQL8Dialect`)
 - `SPRING_JPA_HIBERNATE_DDL_AUTO` (optional; defaults to `validate`)
+- `APP_CORS_ALLOWED_ORIGINS` (required for deployed frontend; comma-separated origins, e.g. `https://your-frontend.vercel.app`)
+  - Must include full origins with `http://` or `https://`.
 
 For local development, you can override `SPRING_JPA_HIBERNATE_DDL_AUTO` to `update` (or use the `dev` profile) to auto-create/update schema.
+
+## Hosting (Backend + MySQL + Vercel Frontend)
+
+### 1) Host backend (Render/Railway/EC2)
+
+- Build command: `./mvnw clean package -DskipTests`
+- Start command: `java -jar target/*.jar`
+
+For Render specifically, this repository includes `render.yaml` with the same build/start configuration.
+
+### 2) Provision managed MySQL
+
+Use any managed MySQL provider (for example PlanetScale, Aiven, AWS RDS, or Railway MySQL), then set:
+
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
+
+Keep:
+
+- `SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver`
+- `SPRING_JPA_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect`
+- `SPRING_JPA_HIBERNATE_DDL_AUTO=validate` (or temporary `update` for first-time schema bootstrapping)
+
+### 3) Host frontend on Vercel
+
+`vercel.json` is already configured to build from `frontend/` and output `frontend/dist`.
+
+Set Vercel environment variable:
+
+- `VITE_API_BASE_URL=https://<your-backend-domain>`
+
+Set backend CORS environment variable to allow your Vercel domain:
+
+- `APP_CORS_ALLOWED_ORIGINS=https://<your-frontend-domain>`
+
+### 4) Deploy order
+
+1. Deploy backend and verify `https://<backend-domain>/swagger-ui.html`
+2. Deploy frontend with `VITE_API_BASE_URL` pointing to backend
+
+### 5) Validate after deploy
+
+- Register and login from frontend
+- Create/read posts from frontend
+- Confirm browser network calls hit backend domain, not Vercel domain
 
   
 ## Maven Libraries used
