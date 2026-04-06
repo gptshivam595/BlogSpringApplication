@@ -47,7 +47,7 @@ public class SecurityConfig {
         this.customUserDetailService = customUserDetailService;
     }
 
-    public static final String[] Auth_List= {
+    public static final String[] AUTH_LIST= {
     		"/api/v1/auth/**",
     		"/v3/api-docs/**",
     		"/swagger-ui/**"
@@ -58,7 +58,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-             	.requestMatchers(Auth_List).permitAll()	
+             	.requestMatchers(AUTH_LIST).permitAll()	
 //            	.requestMatchers("/api/v1/auth/**").permitAll() 
 //            	.requestMatchers("/v3/api-docs/**").permitAll()
 //            	.requestMatchers("/swagger-ui/**").permitAll()
