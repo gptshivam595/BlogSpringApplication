@@ -70,6 +70,7 @@ For cloud deployment, set these variables so the app binds correctly and connect
 - `SPRING_JPA_HIBERNATE_DIALECT` (optional; defaults to `org.hibernate.dialect.MySQL8Dialect`)
 - `SPRING_JPA_HIBERNATE_DDL_AUTO` (optional; defaults to `validate`)
 - `APP_CORS_ALLOWED_ORIGINS` (required for deployed frontend; comma-separated origins, e.g. `https://your-frontend.vercel.app`)
+  - Must include full origins with `http://` or `https://`.
 
 For local development, you can override `SPRING_JPA_HIBERNATE_DDL_AUTO` to `update` (or use the `dev` profile) to auto-create/update schema.
 

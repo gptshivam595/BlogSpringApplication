@@ -97,15 +97,19 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        List<String> allowedOrigins = Arrays.stream(corsAllowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .filter(origin -> origin.startsWith("http://") || origin.startsWith("https://"))
+                .toList();
+        if (allowedOrigins.isEmpty()) {
+            throw new IllegalStateException("No valid CORS origins configured in app.cors.allowed-origins");
+        }
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(
-                Arrays.stream(corsAllowedOrigins.split(","))
-                        .map(String::trim)
-                        .filter(origin -> !origin.isEmpty())
-                        .toList()
-        );
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
