@@ -33,6 +33,8 @@ If you want to use a direct API base URL, copy `.env.example` to `.env` and set:
 VITE_API_BASE_URL=http://localhost:9091
 ```
 
+For production frontend deployments (for example, Vercel), set `VITE_API_BASE_URL` to your deployed backend base URL so API requests do not resolve to the frontend domain.
+
 ## Routes
 
 - `/` Home

@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd frontend && npm ci && npm run build",
+  "outputDirectory": "frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(posts(?:/.*)?|login|register|user|admin|protected)",
+      "destination": "/index.html"
+    }
+  ]
+}
