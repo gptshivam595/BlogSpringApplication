@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: blogspringapplication-backend
+    runtime: java
+    plan: free
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: PORT
+        value: 9091
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+        value: com.mysql.cj.jdbc.Driver
+      - key: SPRING_JPA_HIBERNATE_DIALECT
+        value: org.hibernate.dialect.MySQL8Dialect
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: validate
+      - key: APP_CORS_ALLOWED_ORIGINS
+        sync: false
